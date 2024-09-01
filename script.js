@@ -1,35 +1,27 @@
-$(document).ready(function() {
-    // Hide the loading screen after 3 seconds
-    setTimeout(function() {
-        $('#loading').fadeOut('slow');
-    }, 3000);
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
 
-    // Smooth scrolling for anchor links
-    $('a[href^="#"]').on('click', function(event) {
-        event.preventDefault();
-        var target = this.hash;
-        $('html, body').animate({
-            scrollTop: $(target).offset().top
-        }, 800, function() {
-            window.location.hash = target;
-        });
-    });
+// Configurações iniciais
+const player = {
+    x: 50,
+    y: 50,
+    width: 50,
+    height: 50,
+    color: 'blue'
+};
 
-    // Add animation classes to sections on scroll
-    $(window).on('scroll', function() {
-        $('.animate__animated').each(function() {
-            if ($(this).isInViewport()) {
-                $(this).addClass('animate__fadeIn');
-            }
-        });
-    });
+// Função de atualização do jogo
+function update() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpa o canvas
+    ctx.fillStyle = player.color;
+    ctx.fillRect(player.x, player.y, player.width, player.height); // Desenha o jogador
+}
 
-    // Check if element is in viewport
-    $.fn.isInViewport = function() {
-        var elementTop = $(this).offset().top;
-        var elementBottom = elementTop + $(this).outerHeight();
-        var viewportTop = $(window).scrollTop();
-        var viewportBottom = viewportTop + $(window).height();
-        return elementBottom > viewportTop && elementTop < viewportBottom;
-    };
-});
+// Função de animação
+function animate() {
+    update();
+    requestAnimationFrame(animate); // Solicita o próximo quadro
+}
+
+// Inicia a animação
+animate();
